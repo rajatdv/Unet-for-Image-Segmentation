@@ -119,10 +119,10 @@ def get_unet512(input_shape=(512,512,3),num_class=1):
     dn0a = conv_block(inp,16,(3,3))
     dn0a_pool = MaxPooling2D((2, 2), strides=(2, 2))(dn0a)
     
-    dn0 = conv_block(dn0a,32,(3,3))
+    dn0 = conv_block(dn0a_pool,32,(3,3))
     dn0_pool = MaxPooling2D((2, 2), strides=(2, 2))(dn0)
     
-    dn1 = conv_block(dn0,64,(3,3))
+    dn1 = conv_block(dn0_pool,64,(3,3))
     dn1_pool = MaxPooling2D((2, 2), strides=(2, 2))(dn1)
     
     dn2 = conv_block(dn1_pool,128,(3,3))
@@ -159,7 +159,7 @@ def get_unet512(input_shape=(512,512,3),num_class=1):
     
     up0a = UpSampling2D((2, 2))(up0)
     up0a = concatenate([dn0a, up0a], axis=3)
-    up0a = conv_block(up0,16,(3,3))
+    up0a = conv_block(up0a,16,(3,3))
     
     up0a = Conv2D(16, (3, 3), padding='same')(up0a)
     up0a = BatchNormalization()(up0a)
